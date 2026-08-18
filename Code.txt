@@ -1,0 +1,39 @@
+
+const int porchLight_red = 8;      // Red LED for porch light
+const int hallwayLight_green = 5; // Green LED for hallway light
+const int buttonPin = 11;           
+
+void setup() 
+{
+  pinMode(porchLight_red, OUTPUT);
+  pinMode(hallwayLight_green, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP); 
+}
+
+void loop() 
+{
+  // Detects the button status (LOW = Pressed when using INPUT_PULLUP)
+  int buttonState = digitalRead(buttonPin);
+
+  // If the button is pressed, the lights are turned on
+  if (buttonState == LOW) 
+  {
+    lightsOn(); 
+  }
+}
+
+// Modular function to control the lights as per Linda's requirements
+void lightsOn() 
+{
+  // Both lights turn on
+  digitalWrite(porchLight_red, HIGH);
+  digitalWrite(hallwayLight_green, HIGH);
+
+  // Porch light stays on for 30 seconds
+  delay(30000); 
+  digitalWrite(porchLight_red, LOW); // Turn off porch light
+
+  // Hallway light stays on for 60 seconds
+  delay(30000); 
+  digitalWrite(hallwayLight_green, LOW); // Turn off hallway light
+}
