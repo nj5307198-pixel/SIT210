@@ -106,18 +106,18 @@ void loop()
   Serial.print(currentLux);
   Serial.println(" lux");
 
-  if (currentLux > LUX_THRESHOLD && !isDaylightActive)   // Transition: Low to High intensity
-  {
-    clientMQTT.publish(TELEMETRY_TOPIC, "SUNLIGHT_START");
-    Serial.println("Dispatched event: SUNLIGHT_START");
-    isDaylightActive = true;
-  }
-  else if (currentLux <= LUX_THRESHOLD && isDaylightActive)     // Transition: High to Low intensity
-  {
-    clientMQTT.publish(TELEMETRY_TOPIC, "SUNLIGHT_STOP");
-    Serial.println("Dispatched event: SUNLIGHT_STOP");
-    isDaylightActive = false;
-  }
+ // Check if light level has crossed the daylight threshold.
+// isDaylightActive prevents repeated MQTT publishes while lux stays above/below the threshold.
+if (currentLux > LUX_THRESHOLD && !isDaylightActive) {
+  clientMQTT.publish(TELEMETRY_TOPIC, "SUNLIGHT_START");
+  Serial.println("Dispatched event: SUNLIGHT_START");
+  isDaylightActive = true; // latch state so we don't re-trigger every loop
+}
+else if (currentLux <= LUX_THRESHOLD && isDaylightActive) {
+  clientMQTT.publish(TELEMETRY_TOPIC, "SUNLIGHT_STOP");
+  Serial.println("Dispatched event: SUNLIGHT_STOP");
+  isDaylightActive = false;
+}
 
   delay(1000);
 }
