@@ -1,0 +1,69 @@
+from gpiozero import LED
+import tkinter as tk
+
+# LED setup
+living = LED(17)
+bathroom = LED(27)
+closet = LED(22)
+
+# Function to control the LEDs
+def select_room():
+    choice = room.get()
+
+    living.off()
+    bathroom.off()
+    closet.off()
+
+    if choice == "Living Room":
+        living.on()
+    elif choice == "Bathroom":
+        bathroom.on()
+    elif choice == "Closet":
+        closet.on()
+
+# Create the GUI window
+window = tk.Tk()
+window.title("Smart Home Lights")
+window.geometry("350x250")
+
+# Variable for the selected room
+room = tk.StringVar()
+
+# Heading
+title = tk.Label(window, text="Smart Home Lights")
+title.pack(pady=15)
+
+# Radio buttons
+tk.Radiobutton(
+    window,
+    text="Living Room",
+    variable=room,
+    value="Living Room",
+    command=select_room
+).pack()
+
+tk.Radiobutton(
+    window,
+    text="Bathroom",
+    variable=room,
+    value="Bathroom",
+    command=select_room
+).pack()
+
+tk.Radiobutton(
+    window,
+    text="Closet",
+    variable=room,
+    value="Closet",
+    command=select_room
+).pack()
+
+# Exit button
+tk.Button(
+    window,
+    text="Exit",
+    command=window.destroy
+).pack(pady=20)
+
+# Start the GUI
+window.mainloop()
