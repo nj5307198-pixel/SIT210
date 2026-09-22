@@ -1,0 +1,60 @@
+from gpiozero import PWMLED
+import tkinter as tk
+
+# Create a PWM LED object connected to GPIO pin 27.
+# PWMLED allows the LED brightness to be adjusted instead of only ON/OFF.
+led = PWMLED(27)
+
+# Function to update the LED brightness.
+# The slider sends values from 0 to 100, so divide by 100
+# to convert them to the required range of 0.0 to 1.0.
+def change_brightness(value):
+    led.value = float(value) / 100
+
+# Create the main application window.
+window = tk.Tk()
+
+# Set the title displayed at the top of the window.
+window.title("Living Room Light")
+
+# Set the size of the application window.
+window.geometry("500x300")
+
+# Create a title label for the GUI.
+title = tk.Label(
+    window,
+    text="Living Room Light",
+    font=("Arial", 22)
+)
+
+# Display the title with some spacing.
+title.pack(pady=20)
+
+# Create a horizontal slider to control LED brightness.
+slider = tk.Scale(
+    window,
+    from_=0,                    # Minimum brightness (0%)
+    to=100,                     # Maximum brightness (100%)
+    orient=tk.HORIZONTAL,       # Horizontal slider
+    length=350,                 # Slider width
+    label="Brightness (%)",     # Label displayed above the slider
+    command=change_brightness   # Call function whenever slider moves
+)
+
+# Set the default brightness to 50%.
+slider.set(50)
+
+# Display the slider in the window.
+slider.pack(pady=20)
+
+# Function that runs when the window is closed.
+# Turns the LED off before exiting the application.
+def close_program():
+    led.off()
+    window.destroy()
+
+# Connect the window close button (X) to the close_program function.
+window.protocol("WM_DELETE_WINDOW", close_program)
+
+# Start the Tkinter event loop so the GUI remains open.
+window.mainloop()
